@@ -1,5 +1,5 @@
 # csPortfolio
-* My first html and css page: [Dog Page](https://moranarm.github.io/testPage/dogPage/index.html)
+* My first html and css page: [Dog Page](https://moranarm.github.io/csPortfolio/dogPage/index.html)
 * My [Dice page](https://moranarm.github.io/csPortfolio/Dice/)
 * A line in p5.js that converts a p5color to its opposite rgb values, used in dice
 ```javascript
