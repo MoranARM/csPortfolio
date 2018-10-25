@@ -6,6 +6,7 @@ class Population{
     this.bestIndex = 0;
     this.minStep = 1000;
     this.goal = createVector(windowWidth/2, windowHeight/4);
+    this.goalReached = false;
   }
   
   makePeople(sz){
@@ -24,6 +25,9 @@ class Population{
   update(){
     //console.log(this.people.length);
     for(let i=0; i<this.people.length; i++){
+      if(this.people[i].pos.x<0 || this.people[i].pos.y<0 || this.people[i].pos.x>windowWidth){
+        this.people[i].dead = true;//kills if they are outside of the boarders
+      }
       if(this.people[i].brain.step > this.minStep){//if the bacteria has taken more steps than the best
         this.people[i].dead = true;//kill it
       }else{
@@ -36,6 +40,8 @@ class Population{
     for(let i=0; i<this.people.length; i++){
       if(!this.people[i].dead && !this.people[i].atGoal){
         return false;
+      }if(this.people[i].atGoal){
+        this.goalReached = true;
       }
     }return true;
   }

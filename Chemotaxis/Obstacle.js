@@ -18,9 +18,13 @@ class Obstacle{
   }
   
   fixBacteria(b){
-    b.pos.x = b.pos.x>this.x ? this.x-1 : b.pos.x;
-    b.pos.x = b.pos.x<this.x+this.w ? this.x+this.y+1 : b.pos.x;
-    b.pos.y = b.pos.y>this.y ? this.y-1 : b.pos.y;
-    b.pos.y = b.pos.y<this.y+this.h ? this.y+this.h+1 : b.pos.y;
+    //hits bottom
+    b.pos.y = b.pos.x>this.x && b.pos.x<this.x+this.w && b.pos.y<this.y+this.h+1 && b.pos.y>this.y+this.h-1 ? this.y+this.h+1 : b.pos.y;
+    //hits top
+    b.pos.y = b.pos.x>this.x && b.pos.x<this.x+this.w && b.pos.y<this.y+1 && b.pos.y>this.y-1 ? this.y-1 : b.pos.y;
+    //hits left
+    b.pos.x = b.pos.y>this.y && b.pos.y<this.y+this.h && b.pos.x>this.x-1 && b.pos.x<this.x+1 ? this.x-1 : b.pos.x;
+    //hits right
+    b.pos.x = b.pos.y>this.y && b.pos.y<this.y+this.h && b.pos.y<this.y+this.h-1 && b.pos.y<this.y+this.h+1 ? this.x+this.w+1 : b.pos.x;
   }
 }

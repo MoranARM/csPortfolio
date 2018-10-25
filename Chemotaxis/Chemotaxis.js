@@ -13,11 +13,6 @@ function setup() {
 
 function draw() {
   background(20);
-  if(this.population.gen>15 && this.population.people[0].atGoal){//used to restart the learning process with new obstacles every 15 generations
-    newPopulation();
-  }if(this.population.gen>25){
-    newPopulation();
-  }
   for(let i=0; i<this.obstacles.length; i++){
     this.obstacles[i].show();
   }
@@ -36,6 +31,11 @@ function draw() {
       bacteria.update();
       bacteria.show();
     }*/
+    if(this.population.gen>15 && this.population.goalReached){//used to restart the learning process with new obstacles every 15 generations
+      newPopulation();
+    }if(this.population.gen>25){
+      newPopulation();
+    }
     this.population.update();
     this.population.show();
     for(let i=0; i<this.population.people.length; i++){//checks collision between all bacteria and obstacles
