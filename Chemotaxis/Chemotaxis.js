@@ -13,10 +13,10 @@ function setup() {
 
 function draw() {
   background(20);
-  if(this.population.gen>15 && population.people[0].atGoal){//used to restart the learning process with new obstacles every 15 generations
+  if(this.population.gen>15 && this.population.people[0].atGoal){//used to restart the learning process with new obstacles every 15 generations
     newPopulation();
   }if(this.population.gen>25){
-    
+    newPopulation();
   }
   for(let i=0; i<this.obstacles.length; i++){
     this.obstacles[i].show();
