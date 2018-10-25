@@ -19,12 +19,12 @@ class Obstacle{
   
   fixBacteria(b){
     //hits bottom
-    b.pos.y = b.pos.x>this.x && b.pos.x<this.x+this.w && b.pos.y<this.y+this.h+1 && b.pos.y>this.y+this.h-1 ? this.y+this.h+1 : b.pos.y;
+    b.pos.y = b.pos.x>this.x && b.pos.x<this.x+this.w && b.pos.y<this.y+this.h+5 && b.pos.y>this.y+this.h-5 ? this.y+this.h+5 : b.pos.y;
     //hits top
-    b.pos.y = b.pos.x>this.x && b.pos.x<this.x+this.w && b.pos.y<this.y+1 && b.pos.y>this.y-1 ? this.y-1 : b.pos.y;
+    b.pos.y = b.pos.x>this.x && b.pos.x<this.x+this.w && b.pos.y>this.y-5 && b.pos.y<this.y+5 ? this.y-5 : b.pos.y;
     //hits left
-    b.pos.x = b.pos.y>this.y && b.pos.y<this.y+this.h && b.pos.x>this.x-1 && b.pos.x<this.x+1 ? this.x-1 : b.pos.x;
+    b.pos.x = b.pos.y>this.y && b.pos.y<this.y+this.h && b.pos.x>this.x-5 && b.pos.x<this.x+5 ? this.x-5 : b.pos.x;
     //hits right
-    b.pos.x = b.pos.y>this.y && b.pos.y<this.y+this.h && b.pos.y<this.y+this.h-1 && b.pos.y<this.y+this.h+1 ? this.x+this.w+1 : b.pos.x;
+    b.pos.x = b.pos.y>this.y && b.pos.y<this.y+this.h && b.pos.x>this.x+this.w-5 && b.pos.x<this.x+this.w+5 ? this.x+this.w+5 : b.pos.x;
   }
 }
