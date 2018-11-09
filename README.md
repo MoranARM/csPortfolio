@@ -2,6 +2,7 @@
 * My first html and css page: [Dog Page](https://moranarm.github.io/csPortfolio/dogPage/index.html)
 * My [Dice page](https://moranarm.github.io/csPortfolio/Dice/index.html)
 * My [Chemotaxis page](https://moranarm.github.io/csPortfolio/Chemotaxis/index.html)
+* My [Starfield page](https://moranarm.github.io/csPortfolio/Starfield/index.html)
 * A line in p5.js that converts a p5color to its opposite rgb values, used in dice
 ```javascript
 fill(255-parseInt(di.col.toString(['rgb']).substring(5, di.col.toString(['rgb']).indexOf(",")), 10), 255-parseInt(di.col.toString(['rgb']).slice(di.col.toString(['rgb']).indexOf(",")+1).substring(0, di.col.toString(['rgb']).slice(di.col.toString(['rgb']).indexOf(",")+1).indexOf(",")), 10) , 255-parseInt(di.col.toString(['rgb']).slice(di.col.toString(['rgb']).indexOf(",")+1).substring(di.col.toString(['rgb']).slice(di.col.toString(['rgb']).indexOf(",")+1).indexOf(",")+1).substring(0, di.col.toString(['rgb']).slice(di.col.toString(['rgb']).indexOf(",")+1).substring(di.col.toString(['rgb']).slice(di.col.toString(['rgb']).indexOf(",")+1).indexOf(",")+1).indexOf(",")), 10));
