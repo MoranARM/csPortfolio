@@ -1,4 +1,4 @@
-# csPortfolio
+# Alex's Coding Journey as a csPortfolio
 * My first html and css page: [Dog Page](https://moranarm.github.io/csPortfolio/dogPage/index.html)
 This page was fun to make and I was able to use sound to add to the friendly vibe that I intended for the site to give off. 
 * My [Lightning page](https://moranarm.github.io/csPortfolio/lightning/index.html)
