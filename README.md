@@ -9,6 +9,8 @@ My dice page was very fun to make, especially the part where the color of the de
 My chemotaxis page uses a neural network and someone might comment that I could make it go directly to the dot, but that isn't the point, I wanted it to learn and have to figure out the closest path, without bumping into the walls too many times.
 * My [Starfield page](https://moranarm.github.io/csPortfolio/Starfield/index.html)
 My starfield page has vectorized versions of star wars ships and shows their cockpits as yuou fly though the galaxy, and jump to hyper speed! It took a while to get the images working, but I preloaded them and fixed all the es6 issues associated with it.
+* My [String Parser](https://moranarm.github.io/csPortfolio/StringAlgorithms/index.html)
+My string parser takes in two texts to work with, A Christmas Carol, and Frankenstein. The method that gets how many syllables are in the text was the hardest method to write and I had to figure out what exactly makes a syllable a syllable. Once the code ran without errors I worked on the interface. I went with a layout of the book covers and having the mouse on the right half will open the book to shiw the inside along with the Flesch reading score and grade level.
 * [Here](https://gist.github.com/MoranARM/1e10f3b3714216b38e8e3d9bb37968be) is a gist I made to help others with the basics of es6 syntax
 * A line in p5.js that converts a p5color to its opposite rgb values, used in dice
 ```javascript
