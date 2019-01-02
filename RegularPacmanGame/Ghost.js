@@ -112,7 +112,9 @@ class Ghost{
     this.setNodes();
     let start = this.ghostNodes[0];
     let end = this.ghostNodes[this.ghostNodes.length-1];
+    //console.log("start: ", start, " end: ", end, " gvel: x:", this.gvel.x, " y: ", this.gvel.y);
     let temp = AStar(start, end, this.gvel);
+    //console.log("Temp path: ", temp);
     if(temp!=null){//if the path is found then do not change mainPath
       this.mainPath = temp.clone();
     }
@@ -146,10 +148,10 @@ class Ghost{
         }else if(this.pink){//true if ghost is pink
           let lookPast = 4;//pinky targets 4 spaces in front of pacman
           let pacArrPos = createVector((pacman.pos.x-8)/16+(pacman.vel.x*lookPast), (pacman.pos.y-8)/16+(pacman.vel.y*lookPast));
-          console.log("PacArrPos",pacArrPos);
-          while(pacArrPos.x<=0 || pacArrPos.y<=0 || pacArrPos.x>=28 || pacArrPos.y>=31 || tiles[pacArrPos.y][pacArrPos.x].wall){
+          //console.log("PacArrPos",pacArrPos);
+          while(pacArrPos.x<=0 || pacArrPos.y<=0 || pacArrPos.x>=28 || pacArrPos.y>=31 || tiles[floor(pacArrPos.y)][floor(pacArrPos.x)].wall){
             lookPast-=1;
-            pacArrPos = createVector((pacman.pos.x-8)/16+(pacman.vel.x*this.lookPast), (pacman.pos.y-8)/16+(pacman.vel.y*this.lookPast));
+            pacArrPos = createVector((pacman.pos.x-8)/16+(pacman.vel.x*lookPast), (pacman.pos.y-8)/16+(pacman.vel.y*lookPast));
           }this.ghostNodes[this.ghostNodes.length-1] = (dist((this.gpos.x-8)/16, (this.gpos.y-8)/16, pacArrPos.x, pacArrPos.y)<1) ? new Node((pacman.pos.x-8)/16, (pacman.pos.y-8)/16) : new Node(pacArrPos.x, pacArrPos.y);
           //*******************Not finding a path sometimes due to when blinky is sometimes dead??******************
         }else if(this.ink){//true if ghost is blue
@@ -188,6 +190,7 @@ class Ghost{
       }
     }if((this.gpos.x-8)%16 == 0 && (this.gpos.y-8)%16 == 0){//if on a critical position
       let arrPos = createVector((this.gpos.x-8)/16, (this.gpos.y-8)/16);//convert to array position
+      console.log("Ghost: Pink:", this.pink, " arrPos X:", arrPos.x, " Y: ",arrPos.y);
       //let tempVel = createVector(gvel.x/2, gvel.y/2);//can be used to slow ghosts down in the tunnel
       if(tiles[floor(arrPos.y)][floor(arrPos.x)].tunnel){//checks if the next position will be in the tunnel
         pacman.specialCase(this.gpos);

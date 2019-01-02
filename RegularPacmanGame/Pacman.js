@@ -3,7 +3,7 @@ class Pacman{
   constructor(){
     this.pos = createVector(13*16+8, 23*16+8); //Starting position of pacman
     this.vel = createVector(-1, 0);//velocity or change where Pacman is headed
-    this.goTo = createVector(-1,0);//When pacman reaches a node, the velocity changes to where he is going with goTo
+    this.goTo = createVector(-1, 0);//When pacman reaches a node, the velocity changes to where he is going with goTo
     this.turn = false;
     this.score = 0;
     this.lives = 2;
@@ -30,19 +30,13 @@ class Pacman{
     }else{//up
       this.rad1 = 5.2359877;//300
       this.rad2 = 10.471975;//600
-    }
-    fill(255,255,0);
+    }fill(255,255,0);
     noStroke();
     if(this.chomp){//used to make pacman open and close his mouth
       arc(this.pos.x, this.pos.y, 20, 20, this.rad1, this.rad2, PIE);
     }else{
       ellipse(this.pos.x, this.pos.y, 20, 20);
-    }if(frameCount%32 == 0){
-      this.chomp = false;
-    }else if(frameCount%16 == 0){
-      this.chomp = true;
-    }else{
-    }
+    }this.chomp = frameCount%32 == 0 ? false : frameCount%16 == 0 ? true : this.chomp;
   }
   
   //returns true if pacman is hit by a ghost
@@ -107,10 +101,11 @@ class Pacman{
       }
       //the position in the tiles array that pacman is turning towards
       let positionToCheck = new createVector(arrPosition.x + this.goTo.x, arrPosition.y + this.goTo.y);
+      console.log("Position to Check X: ", positionToCheck.x, " Y: ", positionToCheck.y);
       if(tiles[floor(positionToCheck.y)][floor(positionToCheck.x)].tunnel){//checks if the next position will be in the tunnel
         specialCase(this.pos);
       }if(tiles[floor(positionToCheck.y)][floor(positionToCheck.x)].wall){//checks if the space is not a wall
-        return (tiles[floor(arrPosition.y + this.vel.y)][floor(arrPosition.x + this.vel.x)].wall);//if both are walls then don't move
+        return !(tiles[floor(arrPosition.y + this.vel.y)][floor(arrPosition.x + this.vel.x)].wall);//if both are walls then don't move
       }else{//allows pacman to turn
         this.vel = createVector(this.goTo.x, this.goTo.y);
         return true;

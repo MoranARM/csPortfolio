@@ -331,37 +331,36 @@ function mousePressed(){
 }
 
 function keyPressed(){//controls for pacman
-  switch(key){
-  case 'W':
-    console.log("W");
+  switch(keyCode){
+  case 87://w
     pacman.goTo = createVector(0, -1);
     pacman.turn = true;
     break;
-  case 's':
+  case 83://s
     pacman.goTo = createVector(0, 1);
     pacman.turn = true;
     break;
-  case 'a':
+  case 65://a
     pacman.goTo = createVector(-1, 0);
     pacman.turn= true;
     break;
-  case 'd':
+  case 68://d
     pacman.goTo = createVector(1, 0);
     pacman.turn = true;
     break;
-  case UP:
+  case 38://Up
     pacman.goTo = createVector(0, -1);
     pacman.turn = true;
     break;
-  case DOWN:
+  case 40://Down
     pacman.goTo = createVector(0, 1);
     pacman.turn = true;
     break;
-  case LEFT:
+  case 37://Left
     pacman.goTo = createVector(-1, 0);
     pacman.turn= true;
     break;
-  case RIGHT:
+  case 39://Right
     pacman.goTo = createVector(1, 0);
     pacman.turn = true;
     break;
@@ -402,9 +401,10 @@ function AStar(start, finish, vel){
   while(true){//continues until the best path is found or there is no path
     if(big.head==null){
       return;
-    }extend = big.pop().data;
-    //extend = big.pop().data;
-    if(extend.path.getLast().data == finish){//if the path is found
+    }extend = big.pop();
+    //extend = big.pop();
+    if(extend.path.getLast() == finish){//if the path is found
+      console.log("Well this happened");
       if(!best){//if it is the first path found, set it to the best path
         best = true;
         bestPath = extend.clone();
@@ -417,25 +417,25 @@ function AStar(start, finish, vel){
       }else{//if not the current extend is useless
         extend = big.pop();//gets the next path
       }//if the last node has already been checked and the distance was shorter than this path then it is not worth using
-    }if(!extend.path.getLast().data.checked || extend.distance<extend.path.getLast().data.smallestDistToLoc){
-      if(!best || extend.distance+dist(extend.path.getLast().data.x, extend.path.getLast().data.y, finish.x, finish.y)<bestPath.distance){//don't look at paths that are longer than the one that has already reached the goal
+    }if(!extend.path.getLast().checked || extend.distance<extend.path.getLast().smallestDistToLoc){
+      if(!best || extend.distance+dist(extend.path.getLast().x, extend.path.getLast().y, finish.x, finish.y)<bestPath.distance){//don't look at paths that are longer than the one that has already reached the goal
         //if this is the first path to find a working path then set the smallest distance to this path's distance
-        extend.path.getLast().data.smallestDistToLoc = extend.distance;
+        extend.path.getLast().smallestDistToLoc = extend.distance;
         //move all paths to sort from big then add the new paths (in the for loop) and sort them back into big
         //console.log("Big", big, "big clone", big.clone());
         sorting = big.clone();
         let tempN = new Node(0, 0);//reset Temp Node
         if(extend.path.size>1){
-          tempN = extend.path.getAt(extend.path.size-2).data;//sets up the temp node to be the last in the path
-        }for(let i=0; i<extend.path.getLast().data.edges.size; i++){
-          if(tempN != extend.path.getLast().data.edges.getAt(i).data){//if not moving backwards the new node is not the one behind it
+          tempN = extend.path.getAt(extend.path.size-1);//sets up the temp node to be the last in the path
+        }for(let i=0; i<extend.path.getLast().edges.size; i++){
+          if(tempN != extend.path.getLast().edges.getAt(i)){//if not moving backwards the new node is not the one behind it
             //if the direction to the new node is in the opposite way then do not include this path
-            let directionToNode = createVector(extend.path.getLast().data.edges.getAt(i).data.x - extend.path.getLast().data.x, extend.path.getLast().data.edges.getAt(i).data.y - extend.path.getLast().data.y);
+            let directionToNode = createVector(extend.path.getLast().edges.getAt(i).x - extend.path.getLast().x, extend.path.getLast().edges.getAt(i).y - extend.path.getLast().y);
             directionToNode.limit(vel.mag());//mag() gets the magnitude or length of a vector
             if(directionToNode.x == -1*extend.velAtLast.x && directionToNode.y == -1*extend.velAtLast.y){
             }else{//if it is not turing around
               extended = extend.clone();
-              extended.addToTail(extend.path.getLast().data.edges.getAt(i).data, finish);
+              extended.addToTail(extend.path.getLast().edges.getAt(i), finish);
               extended.velAtLast = createVector(directionToNode.x, directionToNode.y);
               sorting.addElement(extended.clone());//add this extended list to the lists to be sorted
             }
@@ -444,19 +444,24 @@ function AStar(start, finish, vel){
         while(!sorting.isEmpty()){
           let max = -1;
           let iMax = 0;//index of max
+          console.log("Sorting size: ", sorting.size, " Sorting: ", sorting);
           for(let i=0; i<sorting.size; i++){
-            //console.log(i, sorting.getAt(i), iMax, max);
-            //console.log(sorting.getAt(i).data.distance, sorting.getAt(i).data.distToLast);
-            if(max<sorting.getAt(i).data.distance+sorting.getAt(i).data.distToLast){//A* uses dist to goal + path length to choose the best
+            console.log("Sorting: ", sorting, " sorting size: ", sorting.size, " getAt(i): ", sorting.getAt(i), " i: ", i);
+            if(max<sorting.getAt(i).distance+sorting.getAt(i).distToLast){//A* uses dist to goal + path length to choose the best
               iMax = i;
-              max = sorting.getAt(i).data.distance+sorting.getAt(i).data.distToLast;
+              max = sorting.getAt(i).distance+sorting.getAt(i).distToLast;
             }
-          }big.addFirst(sorting.removeAt(iMax).data.clone());//add the best to the front so worst are at the back
+          }if(sorting.head!=null){
+            console.log("iMax: ", iMax, "sorting", sorting, "sorting size: ", sorting.size);
+            big.addFirst(sorting.removeAt(iMax).clone());//add the best to the front so worst are at the back
+          }else{
+            break;
+          }
         }
-      }extend.path.getLast().data.checked = true;
+      }extend.path.getLast().checked = true;
     }if(big.isEmpty()){//true if no paths are left
       if(best == false){//true if there is no path from start to finish
-        print("ERROR: No Path Found!");//error message
+        console.log("ERROR: No Path Found!");//error message
         return null;
       }else{//if a best path is found then it is returned
         return bestPath.clone();
