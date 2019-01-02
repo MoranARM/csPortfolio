@@ -24,7 +24,8 @@ Getting the formatting issue to wrok between es5 syntax and es6 syntax was extre
 I had to teach myself something that there was barely any online support or understanding of, which is getting p5js to work in es6 syntax and have classes. Another distinct point was understanding the differences in what a js object is verses a java object and how they intereact. 
 * Interests
 I am very interested in knowing as much about coding as possible. I want to learn all about the different data structures and algorithms, which ones are the most efficient and why an inefficient algorithm would ever be used. I am very intrigued by artificial intelligence and enjoy creating my own, especially ones that implement machine learning. I do not like to limit myself to one language, as of now the languages I can code in, from most to least knowledgable is es6 js, java, python, lua, C++ 
-* A LnikedList I made for my Pacman game, along with the LinkedListElement class needed for the former
+* A LinkedList class I made for my Pacman game, along with the LinkedListElement class needed for the former
+Besides writing the class for the usecase of the game I wrote it to demonstrate my knowledge of the data structure and how to make it in a language that doesn't have one, javascipt.
 ```javascript
 class LinkedList{
   constructor(head = null){
