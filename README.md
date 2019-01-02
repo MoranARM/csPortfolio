@@ -30,18 +30,22 @@ Besides writing the class for the usecase of the game I wrote it to demonstrate 
 class LinkedList{
   constructor(head = null){
     this.head = head;
-    this.size = 0;
+    this.size = this.head!=null ? 1 : 0;
   }
   
-  getAt(index){//return the node at index
+  getEAt(index){//returns the LinkedListElement at index
     let count = 0;
     let element = this.head;
     while(element){
       if(count === index){
-        return element.data;
+        return element;
       }count++;
       element = element.next;
     }return null;
+  }
+  
+  getAt(index){//return the node at index
+    return return this.getEAt(index)==null ? null : this.getEAt(index).data;
   }
   
   addAt(element, index){
@@ -53,7 +57,7 @@ class LinkedList{
       this.head = new LinkedListElement(element, this.head);
       this.size++;
       return;
-    }const prev = this.getAt(index-1);
+    }const prev = this.getEAt(index-1);
     let newElement = new LinkedListElement(element);
     newElement = prev.next;
     prev.next = newElement;
@@ -76,13 +80,11 @@ class LinkedList{
   }
   
   pop(){//pops an element from the stack represented by the list, removes and returns the first element
-    let temp = this.head;
-    this.removeAt(0);
-    return temp.data;
+    return this.removeAt(0);
   }
   
   isEmpty(){//returns true if there are no elements, it returns if the size is equal to 0
-    return this.head != null;
+    return this.head == null;
   }
   
   clone(){//returns a copy of the LinkedList
@@ -108,7 +110,7 @@ class LinkedList{
       this.head = this.head.next;
       this.size--;
       return temp.data;
-    }const prev = this.getAt(index-1);
+    }const prev = this.getEAt(index-1);
     if(!prev || !prev.next){
       return;
     }prev.next = prev.next.next;
@@ -122,7 +124,7 @@ class LinkedList{
   }
   
   getLast(){//returns the last element in the LinkedList
-    return this.getAt(this.size-1);
+    return this.size>0 ? this.getAt(this.size-1) : null;
   }
 }
 
