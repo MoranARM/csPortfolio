@@ -24,38 +24,111 @@ Getting the formatting issue to wrok between es5 syntax and es6 syntax was extre
 I had to teach myself something that there was barely any online support or understanding of, which is getting p5js to work in es6 syntax and have classes. Another distinct point was understanding the differences in what a js object is verses a java object and how they intereact. 
 * Interests
 I am very interested in knowing as much about coding as possible. I want to learn all about the different data structures and algorithms, which ones are the most efficient and why an inefficient algorithm would ever be used. I am very intrigued by artificial intelligence and enjoy creating my own, especially ones that implement machine learning. I do not like to limit myself to one language, as of now the languages I can code in, from most to least knowledgable is es6 js, java, python, lua, C++ 
-* Some rather difficult code implementing the NEAT algorithm in my Pacman game
-```java
-void addNodeMutation(ArrayList<Counter> innovation){//connection gene is randomly chosen and replaced with two new connections
-    if(connections.size() == 0){
-      addConnectionMutation(innovation);
-      return;
-    }
-    int randomConnection = floor(random(connections.size()));
-    while(connections.get(randomConnection).inNode == nodes.get(biasNode) && connections.size()!=1){//keep the bias connected
-      randomConnection = floor(random(connections.size()));
-    }
-    connections.get(randomConnection).disable();//disable it
-    int newNodeNum = nextNode;
-    nodes.add(new NodeGene(newNodeNum));
-    nextNode++;
-    int connectionInnovationNum = getInnovationNumber(innovation, connections.get(randomConnection).inNode, getNode(newNodeNum));//add a new connection with weight of 1
-    connections.add(new ConnectionGene(connections.get(randomConnection).inNode, getNode(newNodeNum), 1, connectionInnovationNum));
-    connectionInnovationNum = getInnovationNumber(innovation, getNode(newNodeNum), connections.get(randomConnection).outNode);
-    //adds a new connection from the new node that has the same weight as the disabled connection
-    connections.add(new ConnectionGene(getNode(newNodeNum), connections.get(randomConnection).outNode, connections.get(randomConnection).weight, connectionInnovationNum));
-    getNode(newNodeNum).layer = connections.get(randomConnection).inNode.layer+1;
-    connectionInnovationNum = getInnovationNumber(innovation, nodes.get(biasNode), getNode(newNodeNum));
-    connections.add(new ConnectionGene(nodes.get(biasNode), getNode(newNodeNum), 0, connectionInnovationNum));//connect the new node to the bias with a weight of 0
-    //increment the layer numbers of all layers greater than or equal to this node
-    if(getNode(newNodeNum).layer == connections.get(randomConnection).outNode.layer){
-      for(int i=0; i<nodes.size()-1; i++){//do not include the newest node
-        if(nodes.get(i).layer >= getNode(newNodeNum).layer){
-          nodes.get(i).layer++;
-        }
-      }
-      layers++;
-    }
-    connectNodes();
+* A LnikedList I made for my Pacman game, along with the LinkedListElement class needed for the former
+```javascript
+class LinkedList{
+  constructor(head = null){
+    this.head = head;
+    this.size = 0;
   }
+  
+  getAt(index){//return the node at index
+    let count = 0;
+    let element = this.head;
+    while(element){
+      if(count === index){
+        return element.data;
+      }count++;
+      element = element.next;
+    }return null;
+  }
+  
+  addAt(element, index){
+    if(!this.head){//if the list is empty
+      this.head = new LinkedListElement(element);
+      this.size++;
+      return;
+    }if(index === 0){
+      this.head = new LinkedListElement(element, this.head);
+      this.size++;
+      return;
+    }const prev = this.getAt(index-1);
+    let newElement = new LinkedListElement(element);
+    newElement = prev.next;
+    prev.next = newElement;
+    this.size++;
+    return this.head;
+  }
+  
+  addElement(element){//adds on the element to the end of the LinkedList
+    let newElement = new LinkedListElement(element);
+    if(!this.head){
+      this.head = newElement;
+      this.size++;
+      return this.head;
+    }let tail = this.head;
+    while(tail.next !== null){
+      tail = tail.next;
+    }tail.next = newElement
+    this.size++;
+    return this.head;
+  }
+  
+  pop(){//pops an element from the stack represented by the list, removes and returns the first element
+    let temp = this.head;
+    this.removeAt(0);
+    return temp.data;
+  }
+  
+  isEmpty(){//returns true if there are no elements, it returns if the size is equal to 0
+    return this.head != null;
+  }
+  
+  clone(){//returns a copy of the LinkedList
+    let temp = new LinkedList();
+    temp.head = this.head;
+    temp.size = this.size;
+    return temp;
+  }
+  
+  addFirst(element){
+    let newElement = new LinkedListElement(element);
+    newElement.next = this.head;
+    this.head = newElement;
+    this.size++;
+  }
+  
+  removeAt(index){//removes the node at index and returns it
+    if(!this.head){//when this.head equals null
+      return;
+    }if(index === 0){//if the head then make next the head
+      let temp = this.head;
+      temp.next = null;
+      this.head = this.head.next;
+      this.size--;
+      return temp.data;
+    }const prev = this.getAt(index-1);
+    if(!prev || !prev.next){
+      return;
+    }prev.next = prev.next.next;
+    this.size--;
+    return this.head.data;
+  }
+  
+  clearList(){//resets all values of the LinkedList
+    this.head = null;
+    this.size = 0;
+  }
+  
+  getLast(){//returns the last element in the LinkedList
+    return this.getAt(this.size-1);
+  }
+}
+
+class LinkedListElement{
+  constructor(data, next = null){
+    this.data = data;
+    this.next = next;
+  }
+}
 ```
