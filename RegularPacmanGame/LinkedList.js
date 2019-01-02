@@ -26,16 +26,14 @@ class LinkedList{
       return;
     }if(index === 0){
       this.head = new LinkedListElement(element, this.head);
-      console.log("size before: ", this.size);
       this.size++;
-      console.log("size after: ", this.size);
       return;
     }const prev = this.getEAt(index-1);
     let newElement = new LinkedListElement(element);
-    newElement = prev.next;
+    newElement.next = prev.next;
     prev.next = newElement;
     this.size++;
-    return this.head;
+    return;
   }
   
   addElement(element){//adds on the element to the end of the LinkedList
@@ -43,13 +41,13 @@ class LinkedList{
     if(!this.head){
       this.head = newElement;
       this.size++;
-      return this.head;
+      return;
     }let tail = this.head;
     while(tail.next !== null){
       tail = tail.next;
     }tail.next = newElement;
     this.size++;
-    return this.head;
+    return;
   }
   
   pop(){//pops an element from the stack represented by the list, removes and returns the first element
@@ -86,9 +84,10 @@ class LinkedList{
     }const prev = this.getEAt(index-1);
     if(!prev || !prev.next){
       return;
-    }prev.next = prev.next.next;
+    }let temp = prev.next;
+    prev.next = prev.next.next;
     this.size--;
-    return this.head.data;
+    return temp.data;
   }
   
   clearList(){//resets all values of the LinkedList
