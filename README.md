@@ -45,7 +45,7 @@ class LinkedList{
   }
   
   getAt(index){//return the node at index
-    return return this.getEAt(index)==null ? null : this.getEAt(index).data;
+    return this.getEAt(index)==null ? null : this.getEAt(index).data;
   }
   
   addAt(element, index){
@@ -59,10 +59,10 @@ class LinkedList{
       return;
     }const prev = this.getEAt(index-1);
     let newElement = new LinkedListElement(element);
-    newElement = prev.next;
+    newElement.next = prev.next;
     prev.next = newElement;
     this.size++;
-    return this.head;
+    return;
   }
   
   addElement(element){//adds on the element to the end of the LinkedList
@@ -70,13 +70,13 @@ class LinkedList{
     if(!this.head){
       this.head = newElement;
       this.size++;
-      return this.head;
+      return;
     }let tail = this.head;
     while(tail.next !== null){
       tail = tail.next;
-    }tail.next = newElement
+    }tail.next = newElement;
     this.size++;
-    return this.head;
+    return;
   }
   
   pop(){//pops an element from the stack represented by the list, removes and returns the first element
