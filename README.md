@@ -3,13 +3,15 @@
 This page was fun to make and I was able to use sound to add to the friendly vibe that I intended for the site to give off. 
 * My [Lightning page](https://moranarm.github.io/csPortfolio/lightning/index.html)
 My lightning page will be fixed later on as currently this version is a mess between es5 and es6 js but I will be making it run smoothly and adding music to it later.
+* [College Presentation](https://docs.google.com/presentation/d/e/2PACX-1vSz63XYFmLCo4lpmcDufMi450PR8rp9EJMX666LPO8D7g4zMFWxa97SaYVDbJSRZMo6lnGwVnzlvl4R/pub?start=true&loop=true&delayms=3000)
+Here is a presentation on Carnegie Mellon University to give a short run down of what they have to offer, including a couple videos to give a better understanding.
 * My [Dice page](https://moranarm.github.io/csPortfolio/Dice/index.html)
 My dice page was very fun to make, especially the part where the color of the description panel on the right is the exact opposite of what was on the die.
 * My [Chemotaxis page](https://moranarm.github.io/csPortfolio/Chemotaxis/index.html)
 My chemotaxis page uses a neural network and someone might comment that I could make it go directly to the dot, but that isn't the point, I wanted it to learn and have to figure out the closest path, without bumping into the walls too many times.
 * My [Starfield page](https://moranarm.github.io/csPortfolio/Starfield/index.html)
 My starfield page has vectorized versions of star wars ships and shows their cockpits as yuou fly though the galaxy, and jump to hyper speed! It took a while to get the images working, but I preloaded them and fixed all the es6 issues associated with it.
-* My [String Parser](https://moranarm.github.io/csPortfolio/StringAlgorithms/index.html)
+* My [String Parser](https://docs.google.com/presentation/d/e/2PACX-1vRl-XgKtMmJx78OYeaVCHrHq3IZM6J4UOC9TOFCmr3xXXtZmp-kGzUnLdkSl7BO5UwMdwR4f-LW3TAN/pub?start=true&loop=true&delayms=3000)
 My string parser takes in two texts to work with, A Christmas Carol, and Frankenstein. The method that gets how many syllables are in the text was the hardest method to write and I had to figure out what exactly makes a syllable a syllable. Once the code ran without errors I worked on the interface. I went with a layout of the book covers and having the mouse on the right half will open the book to shiw the inside along with the Flesch reading score and grade level.
 * [Here](https://gist.github.com/MoranARM/1e10f3b3714216b38e8e3d9bb37968be) is a gist I made to help others with the basics of es6 syntax
 * A line in p5.js that converts a p5color to its opposite rgb values, used in dice
