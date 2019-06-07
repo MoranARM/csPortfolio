@@ -3,7 +3,7 @@
 This page was fun to make and I was able to use sound to add to the friendly vibe that I intended for the site to give off. 
 * My [Lightning page](https://moranarm.github.io/csPortfolio/lightning/index.html)
 My lightning page will be fixed later on as currently this version is a mess between es5 and es6 js but I will be making it run smoothly and adding music to it later.
-* [College Presentation](https://docs.google.com/presentation/d/e/2PACX-1vSz63XYFmLCo4lpmcDufMi450PR8rp9EJMX666LPO8D7g4zMFWxa97SaYVDbJSRZMo6lnGwVnzlvl4R/pub?start=true&loop=true&delayms=3000)
+* My [College Presentation](https://docs.google.com/presentation/d/e/2PACX-1vSz63XYFmLCo4lpmcDufMi450PR8rp9EJMX666LPO8D7g4zMFWxa97SaYVDbJSRZMo6lnGwVnzlvl4R/pub?start=true&loop=true&delayms=3000)
 Here is a presentation on Carnegie Mellon University to give a short run down of what they have to offer, including a couple videos to give a better understanding.
 * My [Dice page](https://moranarm.github.io/csPortfolio/Dice/index.html)
 My dice page was very fun to make, especially the part where the color of the description panel on the right is the exact opposite of what was on the die.
