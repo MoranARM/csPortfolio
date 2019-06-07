@@ -11,8 +11,10 @@ My dice page was very fun to make, especially the part where the color of the de
 My chemotaxis page uses a neural network and someone might comment that I could make it go directly to the dot, but that isn't the point, I wanted it to learn and have to figure out the closest path, without bumping into the walls too many times.
 * My [Starfield page](https://moranarm.github.io/csPortfolio/Starfield/index.html)
 My starfield page has vectorized versions of star wars ships and shows their cockpits as yuou fly though the galaxy, and jump to hyper speed! It took a while to get the images working, but I preloaded them and fixed all the es6 issues associated with it.
-* My [String Parser](https://docs.google.com/presentation/d/e/2PACX-1vRl-XgKtMmJx78OYeaVCHrHq3IZM6J4UOC9TOFCmr3xXXtZmp-kGzUnLdkSl7BO5UwMdwR4f-LW3TAN/pub?start=true&loop=true&delayms=3000)
+* My [String Parser](https://drive.google.com/file/d/1hlD9MIC7UrC8t3wSZwv7iSq-qjVHoQmP/view?usp=sharing)
 My string parser takes in two texts to work with, A Christmas Carol, and Frankenstein. The method that gets how many syllables are in the text was the hardest method to write and I had to figure out what exactly makes a syllable a syllable. Once the code ran without errors I worked on the interface. I went with a layout of the book covers and having the mouse on the right half will open the book to shiw the inside along with the Flesch reading score and grade level.
+* My [Final Project](https://moranarm.github.io/csPortfolio/PacNEATjs/index.html)
+My Final Project consisted of recreating the game Pacman in Javascript, as well as making a Neural Netowrk train to beat the game. WHile the training portion is still in progress, I later plan to have it save to files in order for them to be loaded from so that watching the training occur does not need to be part of the steps to watch it. The pacman game itself was most difficult in implementing the A* Path finding algorithm as it required the use of a LinkedList, and as that data structure doesn't exist in javascript I had to make one in order to get the path finding to work.
 * [Here](https://gist.github.com/MoranARM/1e10f3b3714216b38e8e3d9bb37968be) is a gist I made to help others with the basics of es6 syntax
 * A line in p5.js that converts a p5color to its opposite rgb values, used in dice
 ```javascript
