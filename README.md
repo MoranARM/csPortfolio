@@ -1,64 +1,140 @@
-# finalProject
-
-# PacNEATjs create Pacman in Javascript
-
-This project was to create the game Pacman in Javascript, using p5.js and es6 syntax, along with implementing the NEAT algorithm to train pacman to beat the game itself. The game has the ghosts finding the correct location around pacman, being Blinky goes directly after him, Pinky goes 4 spaces ahead, Inky uses pacman and blinky's locations and Clyde goes right after pacman until he is within 8 spaces, turing to scatter mode until he is farther than 8 away from Pacman, then goes back to targeting him. The visuals for Pacman are made using p5js objects such as ellipses, arcs and rectangles in order to run smoother than having an image move around the screen, which is beneficial to both the end result of how the ghosts and pacman appear as well as the playability of the game to run at a smooth framerate. 
-
-### Difficulties or opportunities you encountered along the way.
-
-The toughest part was getting the custom made LinkedList to work with the A* algortihm implementation in order to have the Ghosts use accurate path finding to get to their target positions, reletive to Pacman. Other difficulties involved transitioning from Java syntax to the new way in which javascript classes are made and can be modified, especially the difference between when to use this. or let and just call the variable by its name normally. 
-
-### Most interesting piece of your code and explanation for what it does.
-
-```Javascript
-if(this.goHome){//if retruning home then the target is above the ghost spawn
-  this.ghostNodes[this.ghostNodes.length] = new PathNode(13, 11);
-}else{
-  if(this.chase){
-    if(this.clyd){//true if ghost is orange
-      if(dist((this.gpos.x-8)/16, (this.gpos.y-8)/16, (pacman.pos.x-8)/16, (pacman.pos.y-8)/16)>8){
-        this.ghostNodes[this.ghostNodes.length] = new PathNode((pacman.pos.x-8)/16, (pacman.pos.y-8)/16);//go after pacman
-      }else{
-        this.ghostNodes[this.ghostNodes.length] = new PathNode(this.scatx, this.scaty);//run away from pacman
-      }
-    }else if(this.pink){//true if ghost is pink
-      let lookPast = 4;//pinky targets 4 spaces in front of pacman
-      let pacArrPos = createVector((pacman.pos.x-8)/16+(pacman.vel.x*lookPast), (pacman.pos.y-8)/16+(pacman.vel.y*lookPast));
-      //console.log("PacArrPos",pacArrPos);
-      while(pacArrPos.x<=0 || pacArrPos.y<=0 || pacArrPos.x>=28 || pacArrPos.y>=31 || originalTiles[floor(pacArrPos.y)][floor(pacArrPos.x)].wall){
-        lookPast-=1;
-        pacArrPos = createVector((pacman.pos.x-8)/16+(pacman.vel.x*lookPast), (pacman.pos.y-8)/16+(pacman.vel.y*lookPast));
-      }this.ghostNodes[this.ghostNodes.length] = (dist((this.gpos.x-8)/16, (this.gpos.y-8)/16, pacArrPos.x, pacArrPos.y)<1) ? new PathNode((pacman.pos.x-8)/16, (pacman.pos.y-8)/16) : new PathNode(pacArrPos.x, pacArrPos.y);
-    }else if(this.ink){//true if ghost is blue
-      let pacPos = createVector((pacman.pos.x-8)/16, (pacman.pos.y-8)/16);
-      let blinkPos = createVector((blinky.gpos.x-8)/16, (blinky.gpos.y-8)/16);
-      let blinkToPac = createVector(pacPos.x-blinkPos.x, pacPos.y-blinkPos.y);
-      let goal = createVector(pacPos.x+blinkToPac.x, pacPos.y+blinkToPac.y);
-      let closestTile = getClosestNonWallTile(goal);
-      this.ghostNodes[this.ghostNodes.length] = (dist((this.gpos.x-8)/16, (this.gpos.y-8)/16, closestTile.x, closestTile.y)<1) ? new PathNode((pacman.pos.x-8)/16, (pacman.pos.y-8)/16) : new PathNode(closestTile.x, closestTile.y);
-    }else{//target pacman, what Blinky uses
-      this.ghostNodes[this.ghostNodes.length] = new PathNode((pacman.pos.x-8)/16, (pacman.pos.y-8)/16);
-    }
-  }else{
-    this.ghostNodes[this.ghostNodes.length] = new PathNode(this.scatx, this.scaty);//scatter to corner
+# Alex's Coding Journey as a csPortfolio
+* My first html and css page: [Dog Page](https://moranarm.github.io/csPortfolio/dogPage/index.html)
+This page was fun to make and I was able to use sound to add to the friendly vibe that I intended for the site to give off. 
+* My [Lightning page](https://moranarm.github.io/csPortfolio/lightning/index.html)
+My lightning page will be fixed later on as currently this version is a mess between es5 and es6 js but I will be making it run smoothly and adding music to it later.
+* My [College Presentation](https://docs.google.com/presentation/d/e/2PACX-1vSz63XYFmLCo4lpmcDufMi450PR8rp9EJMX666LPO8D7g4zMFWxa97SaYVDbJSRZMo6lnGwVnzlvl4R/pub?start=true&loop=true&delayms=3000)
+Here is a presentation on Carnegie Mellon University to give a short run down of what they have to offer, including a couple videos to give a better understanding.
+* My [Dice page](https://moranarm.github.io/csPortfolio/Dice/index.html)
+My dice page was very fun to make, especially the part where the color of the description panel on the right is the exact opposite of what was on the die.
+* My [Chemotaxis page](https://moranarm.github.io/csPortfolio/Chemotaxis/index.html)
+My chemotaxis page uses a neural network and someone might comment that I could make it go directly to the dot, but that isn't the point, I wanted it to learn and have to figure out the closest path, without bumping into the walls too many times.
+* My [Starfield page](https://moranarm.github.io/csPortfolio/Starfield/index.html)
+My starfield page has vectorized versions of star wars ships and shows their cockpits as yuou fly though the galaxy, and jump to hyper speed! It took a while to get the images working, but I preloaded them and fixed all the es6 issues associated with it.
+* My [String Parser](https://drive.google.com/file/d/1hlD9MIC7UrC8t3wSZwv7iSq-qjVHoQmP/view?usp=sharing)
+My string parser takes in two texts to work with, A Christmas Carol, and Frankenstein. The method that gets how many syllables are in the text was the hardest method to write and I had to figure out what exactly makes a syllable a syllable. Once the code ran without errors I worked on the interface. I went with a layout of the book covers and having the mouse on the right half will open the book to shiw the inside along with the Flesch reading score and grade level.
+* My [Final Project](https://moranarm.github.io/csPortfolio/PacNEATjs/index.html)
+My Final Project consisted of recreating the game Pacman in Javascript, as well as making a Neural Netowrk train to beat the game. WHile the training portion is still in progress, I later plan to have it save to files in order for them to be loaded from so that watching the training occur does not need to be part of the steps to watch it. The pacman game itself was most difficult in implementing the A* Path finding algorithm as it required the use of a LinkedList, and as that data structure doesn't exist in javascript I had to make one in order to get the path finding to work.
+* [Here](https://gist.github.com/MoranARM/1e10f3b3714216b38e8e3d9bb37968be) is a gist I made to help others with the basics of es6 syntax
+* A line in p5.js that converts a p5color to its opposite rgb values, used in dice
+```javascript
+fill(255-parseInt(di.col.toString(['rgb']).substring(5, di.col.toString(['rgb']).indexOf(",")), 10), 255-parseInt(di.col.toString(['rgb']).slice(di.col.toString(['rgb']).indexOf(",")+1).substring(0, di.col.toString(['rgb']).slice(di.col.toString(['rgb']).indexOf(",")+1).indexOf(",")), 10) , 255-parseInt(di.col.toString(['rgb']).slice(di.col.toString(['rgb']).indexOf(",")+1).substring(di.col.toString(['rgb']).slice(di.col.toString(['rgb']).indexOf(",")+1).indexOf(",")+1).substring(0, di.col.toString(['rgb']).slice(di.col.toString(['rgb']).indexOf(",")+1).substring(di.col.toString(['rgb']).slice(di.col.toString(['rgb']).indexOf(",")+1).indexOf(",")+1).indexOf(",")), 10));
+```
+* Pride
+I am very proud of all coding that I do as I work hard on every project, the harder I had to work the more I enjoyed doing it and the more proud I am. I am currently most proud of Chemotaxis as I was able to make a working ai in es6 js.
+* Hurdles
+Getting the formatting issue to wrok between es5 syntax and es6 syntax was extremely hard to do but once I got it working I felt great about it and could teach others the major differences now. 
+* Distinct points in the development process
+I had to teach myself something that there was barely any online support or understanding of, which is getting p5js to work in es6 syntax and have classes. Another distinct point was understanding the differences in what a js object is verses a java object and how they intereact. 
+* Interests
+I am very interested in knowing as much about coding as possible. I want to learn all about the different data structures and algorithms, which ones are the most efficient and why an inefficient algorithm would ever be used. I am very intrigued by artificial intelligence and enjoy creating my own, especially ones that implement machine learning. I do not like to limit myself to one language, as of now the languages I can code in, from most to least knowledgable is es6 js, java, python, lua, C++ 
+* A LinkedList class I made for my Pacman game, along with the LinkedListElement class needed for the former
+Besides writing the class for the usecase of the game I wrote it to demonstrate my knowledge of the data structure and how to make it in a language that doesn't have one, javascipt.
+```javascript
+class LinkedList{
+  constructor(head = null){
+    this.head = head;
+    this.size = this.head!=null ? 1 : 0;
   }
-}for(let i=0; i<this.ghostNodes.length; i++){//connect nodes together
-  this.ghostNodes[i].addEdges(this.ghostNodes);
+  
+  getEAt(index){//returns the LinkedListElement at index
+    let count = 0;
+    let element = this.head;
+    while(element){
+      if(count === index){
+        return element;
+      }count++;
+      element = element.next;
+    }return null;
+  }
+  
+  getAt(index){//return the node at index
+    return this.getEAt(index)==null ? null : this.getEAt(index).data;
+  }
+  
+  addAt(element, index){
+    if(!this.head){//if the list is empty
+      this.head = new LinkedListElement(element);
+      this.size++;
+      return;
+    }if(index === 0){
+      this.head = new LinkedListElement(element, this.head);
+      this.size++;
+      return;
+    }const prev = this.getEAt(index-1);
+    let newElement = new LinkedListElement(element);
+    newElement.next = prev.next;
+    prev.next = newElement;
+    this.size++;
+    return;
+  }
+  
+  addElement(element){//adds on the element to the end of the LinkedList
+    let newElement = new LinkedListElement(element);
+    if(!this.head){
+      this.head = newElement;
+      this.size++;
+      return;
+    }let tail = this.head;
+    while(tail.next !== null){
+      tail = tail.next;
+    }tail.next = newElement;
+    this.size++;
+    return;
+  }
+  
+  pop(){//pops an element from the stack represented by the list, removes and returns the first element
+    return this.removeAt(0);
+  }
+  
+  isEmpty(){//returns true if there are no elements, it returns if the size is equal to 0
+    return this.head == null;
+  }
+  
+  clone(){//returns a copy of the LinkedList
+    let temp = new LinkedList();
+    temp.head = this.head;
+    temp.size = this.size;
+    return temp;
+  }
+  
+  addFirst(element){
+    let newElement = new LinkedListElement(element);
+    newElement.next = this.head;
+    this.head = newElement;
+    this.size++;
+  }
+  
+  removeAt(index){//removes the node at index and returns it
+    if(!this.head){//when this.head equals null
+      return;
+    }if(index === 0){//if the head then make next the head
+      let temp = this.head;
+      temp.next = null;
+      this.head = this.head.next;
+      this.size--;
+      return temp.data;
+    }const prev = this.getEAt(index-1);
+    if(!prev || !prev.next){
+      return;
+    }prev.next = prev.next.next;
+    this.size--;
+    return this.head.data;
+  }
+  
+  clearList(){//resets all values of the LinkedList
+    this.head = null;
+    this.size = 0;
+  }
+  
+  getLast(){//returns the last element in the LinkedList
+    return this.size>0 ? this.getAt(this.size-1) : null;
+  }
+}
+class LinkedListElement{
+  constructor(data, next = null){
+    this.data = data;
+    this.next = next;
+  }
 }
 ```
-This is the code that is used by all ghosts to decide where they go. It is kept in the Ghost class so that each Blinky, Pinky, Inky, and Clyde are child classes that then use the same function instead of each having a nearly copied and pasted one. This also makes it easier to understand the slight differences between each Ghosts targeting pattern in relation to Pacman.
-## Built With
-
-* [p5.js](https://p5js.org/) - the Javascript Library used for visuals
-* [Processing](https://processing.org/) - The IDE used
-
-## Authors
-
-* **Alex Moran** 
-
-## Acknowledgments
-
-* Hat tip to CodeBullet for his work with NEAT and videos on it
-* Toru Iwatani, for creating Pacman in 1980
-* Ken Stanley for developing the NEAT algorithm in 2002
-* Peter Hart, Nils Nilsson and Bertram Raphael for inventing the A* algorithm in 1968
