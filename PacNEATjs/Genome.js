@@ -2,13 +2,13 @@ class Genome{
   constructor(inp, out, crossover=false){//if crossOver create an empty Genome
     this.inputs = inp;//int
     this.outputs = out;//int
+    this.nodes = [];//[] of NodeGene
+    this.connections = [];//[] of ConnectionGene
+    this.network = [];//[] of NodeGene, nodes in the order they need to be looked at by the neural net
+    this.layers = 2;
+    this.nextNode = 0;
+    this.biasNode;//int
     if(!crossover){
-      this.connections = [];//[] of ConnectionGene
-      this.nodes = [];//[] of NodeGene
-      this.network = [];//[] of NodeGene, nodes in the order they need to be looked at by the neural net
-      this.layers = 2;
-      this.nextNode = 0;
-      this.biasNode;//int
       //used for drawing the neural net
       this.allNodes;//[] of [] of NodeGene, This is a 2D array
       this.nodePos;//[] of vectors
@@ -65,9 +65,9 @@ class Genome{
       this.network[i].activate();
     }let outs = [];//float []
     for(let i=0; i<this.outputs; i++){
-      outs[i] = this.nodes[inputs+i].outputValue;
+      outs[i] = this.nodes[this.inputs+i].outputValue;
     }for(let i=0; i<this.nodes.length; i++){//reset all the nodes for the next feed forward
-      nodes[i].inputSum = 0;
+      this.nodes[i].inputSum = 0;
     }return outs;
   }
   
@@ -264,9 +264,9 @@ class Genome{
     }//add the position of the node to the nodePos array for each layer
     for(let i=0; i<this.layers; i++){
       fill(255, 0, 0);
-      let x = startx+((i+1)*w)/(layers+1.0);
+      let x = startx+((i+1)*w)/(this.layers+1.0);
       for(let j=0; j<this.allNodes[i].length; j++){//each position in the layer
-        let y = starty+(((j+1)*h)/(this.allNodes[i].length+1.0));
+        let y = starty+(((j+1)*h)/( this.allNodes[i].length+1.0));
         this.nodePos.push(createVector(x, y));
         this.nodeNums.push(this.allNodes[i][j].num);
       }
@@ -286,7 +286,7 @@ class Genome{
         stroke(255, 0, 0);
       }else{
         stroke(0, 0, 255);
-      }strokeWeight(map(abs(this.connections[i].weight), 0, 1, 0, 5));
+      }strokeWeight(5*abs(this.connections[i].weight));
       line(inV.x, inV.y, out.x, out.y);
     }//draws the nodes last so they appear over the connections
     for(let i=0; i<this.nodePos.length; i++){

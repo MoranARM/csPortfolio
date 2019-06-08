@@ -7,7 +7,7 @@
 //The NEAT algorithm was implemented going off of this explanation: http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf
 
 
-var pacman;
+var pacman;//used when player starts of NOT running the AI
 let img, map, lvlimg;
 var pinky;
 var blinky;
@@ -48,7 +48,7 @@ tilesRepresentation[28]=[1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1
 tilesRepresentation[29]=[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
 tilesRepresentation[30]=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
   //used for title screen
-var gameStart = false, bounce = false, choice1, choice2, choice3, choice4, toTitle = false, lvlup = false, showAllPath = false; //if true the path the ghost will follow is shown
+var gameStart = false, auto=false, bounce = false, choice1, choice2, choice3, choice4, toTitle = false, lvlup = false, showAllPath = false; //if true the path the ghost will follow is shown
 let xpos = 107, ypos = 68, xspd = 0.7, yspd = 1;
 let xdir = 1, ydir = 1;
 var c1, c2, c3, c4, c5;
@@ -85,14 +85,15 @@ function preload(){
 
 function setup(){
   frameRate(100);
-  createCanvas(448, 496);
+  //createCanvas(948, 496);//448, 496
+  createCanvas(windowWidth, windowHeight);
   img = map;
   resetTiles();
   pacman = new Pacman();
-  pinky = new Pinky();
-  blinky = new Blinky();
-  clyde = new Clyde();
-  inky = new Inky();
+  pinky = new Pinky(pacman);
+  blinky = new Blinky(pacman);
+  clyde = new Clyde(pacman);
+  inky = new Inky(pacman);
   //console.log(tiles);
   population = new Population(500);
   humanPlayer = new Player();
@@ -100,8 +101,11 @@ function setup(){
 
 function draw(){
   if(gameStart){
-    startGame();
-    //if(frameCount%200==0)
+    if(auto){
+      runAI();
+    }else{
+      startGame();
+    }//if(frameCount%200==0)
       //exit();//for testing purposes
   }else{//Title screen
     titleScreen();
@@ -144,8 +148,7 @@ function startGame(){
     if(!pacman.extraLife && pacman.score >= 10000){
       pacman.lives++;
       pacman.extraLife = true;
-    }
-    if(pacman.dotsEaten>2){
+    }if(pacman.dotsEaten>2){
       pinky.release = true;
       if(pacman.dotsEaten>10){
         inky.release = true;
@@ -200,6 +203,215 @@ function startGame(){
     }
   }
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function runAI(){
+  drawToScreen();
+  if(showBestEachGen){//show the best of each gen
+    if(!genPlayerTemp.dead){//if current gen player is not dead then update it
+      genPlayerTemp.look();
+      genPlayerTemp.think();
+      genPlayerTemp.update();
+      genPlayerTemp.show();
+    }else {//if dead move on to the next generation
+      upToGen++;
+      if(upToGen>=population.genPlayers.length){//if at the end then return to the start and stop doing it
+        upToGen=0;
+        showBestEachGen = false;
+        enterStage(upToStage);
+      }else{//if not at the end then get the next generation
+        //console.log("Stage:", population.genPlayers[upToGen].stage);
+        enterStage(population.genPlayers[upToGen].stage);
+        genPlayerTemp = population.genPlayers[upToGen].cloneForReplay();
+      }
+    }
+  }else if(runThroughSpecies){//show all the species 
+    if(!speciesChamp.dead){//if best player is not dead
+      speciesChamp.look();
+      speciesChamp.think();
+      speciesChamp.update();
+      speciesChamp.show();
+    }else{//once dead
+      upToSpecies++;
+      if(upToSpecies>=population.species.length){ 
+        runThroughSpecies = false;
+      }else{
+        speciesChamp = population.species[upToSpecies].champ.cloneForReplay();
+      }
+    }
+  }else if(humanPlaying){//if the user is controling the ship[
+    if(!humanPlayer.dead) {//if the player isnt dead then move and show the player based on input
+      humanPlayer.look();
+      humanPlayer.update();
+      humanPlayer.show();
+    }else{//once done return to ai
+      humanPlaying = false;
+    }
+  }else if(runBest){// if replaying the best ever game
+    if(!population.bestPlayer.dead) {//if best player is not dead
+      population.bestPlayer.look();
+      population.bestPlayer.think();
+      population.bestPlayer.update();
+      population.bestPlayer.show();
+    }else{//once dead
+      runBest = false;//stop replaying it
+      population.bestPlayer = population.bestPlayer.cloneForReplay();//reset the best player so it can play again
+    }
+  }else{//if just evolving normally
+    if(!population.done()){//if any players are alive then update them
+      population.updateAlive();
+    }else{//all dead
+      //genetic algorithm 
+      switch(population.gen){
+      case 20:
+      if(population.bestScore<200){
+        population = new Population(500); 
+        return;
+      }upToStage = 3;
+      enterStage(3);
+      population.newStage = true;
+      break;
+      case 60:
+        upToStage = 4;
+        enterStage(4);
+        population.newStage = true;
+        break;
+      case 120:
+        if(population.bestScore<220){
+          population = new Population(500);
+          return;
+        }
+      }population.naturalSelection();
+    }
+  }
+}
+
+//draws the display screen
+function drawToScreen(){
+  if(!showNothing){
+    noStroke();
+    strokeWeight(10);
+    background(0);
+    fill(0);
+    rectMode(CORNERS);
+    rect(0, 496, width, height);
+    rect(0, 0, 948, 496);
+    strokeWeight(10);
+    stroke(29, 48, 137);
+    line(0, 496, width, 496);
+    stroke(32, 56, 178);
+    strokeWeight(5);
+    line(0, 496, width, 496);
+    strokeWeight(10);
+    stroke(29, 48, 137);
+    line(448, 0, 448, height);
+    line(948, 0, 948, height);
+    stroke(32, 56, 178);
+    strokeWeight(5);
+    line(448, 0, 448, height);
+    line(948, 0, 948, height);
+    image(img, 0, 0);
+    drawBrain();
+    writeInfo();
+  }
+}
+
+function drawBrain(){//shows the brain of whatever genome is currently displayed
+  if(runThroughSpecies){
+    speciesChamp.brain.drawGenome(748, 100, 1000, 496-100);
+  }else if(runBest){
+    population.bestPlayer.brain.drawGenome(748, 100, 1000, 496-100);
+  }else if(humanPlaying){
+    showBrain = false;
+  }else if(showBestEachGen){
+    genPlayerTemp.brain.drawGenome(748, 100, 1000, 496-100);
+  }else{
+    //population.population[0].brain.drawGenome(748, 100, 1000, 496-100);
+    population.population[0].brain.drawGenome(248, 100, 800, 496-100);
+  }
+}
+
+//writes info about the current player
+function writeInfo(){
+  fill(200);
+  textAlign(LEFT);
+  textSize(30);
+  if(showBestEachGen){
+    text("Score: " + genPlayerTemp.score, 650, 50);
+    text("Gen: " + (genPlayerTemp.gen+1), 1150, 50);
+    text("Stage: " + genPlayerTemp.stage, 50, height/2+200);
+  }else if(runThroughSpecies){
+    text("Score: " + speciesChamp.score, 650, 50);
+    text("Species: " + (upToSpecies+1), 1150, 50);
+    text("Players in this Species: "+population.species[upToSpecies].players.length, 50, height/2+200);
+  }else if(humanPlaying){
+    text("Score: "+humanPlayer.score, 650, 50);
+  }else if(runBest){
+    text("Score: "+population.bestPlayer.score, 650, 50);
+    text("Gen: "+population.gen, 1150, 50);
+  }else{
+    if(showBest){          
+      text("Score: "+population.population[0].score, 650, 50);
+      text("Gen: "+population.gen, 1150, 50);
+      text("Species: "+population.species.length, 50, height/2+300);
+      text("Global Best Score: "+population.bestScore, 50, height/2+200);
+    }
+  }
+}
+
+function enterStage(stageNo){//takes in int
+  switch(stageNo){
+  case 1:
+    usingInputsStart =  4;
+    usingInputsEnd =  11;
+    blinkyActive = false;
+    inkyActive = false;
+    pinkyActive = false;
+    clydeActive  = false;
+    bigDotsActive = false;
+    break;
+  case 2:
+    usingInputsStart =  0;
+    usingInputsEnd =  11;
+    blinkyActive = true;
+    inkyActive = false;
+    pinkyActive = true;
+    clydeActive  = false;
+    bigDotsActive = false;
+    break;
+  case 3:
+    usingInputsStart =  0;
+    usingInputsEnd =  11;
+    blinkyActive = true;
+    inkyActive = true;
+    pinkyActive = true;
+    clydeActive  = true;
+    bigDotsActive = false;
+    break;
+  case 4:
+    usingInputsStart =  0;
+    usingInputsEnd =  12;
+    blinkyActive = true;
+    inkyActive = true;
+    pinkyActive = true;
+    clydeActive  = true;
+    bigDotsActive = true;
+    break;
+  }
+}
+
+function enterNewStage(){//resets the population data when entering a new stage
+  population.bestScore = 0;
+  for(let i=0; i<population.species.length; i++){
+    population.species[i].bestFitness = 0;
+  }for(let i=0; i<population.population.length; i++){
+    population.population[i].bestScore = 0;
+    population.population[i].fitness = 0;
+    population.population[i].score = 0;
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function allEaten(){//returns true is all dots have been eaten and false otherwise
   for(let i=0; i<28; i++){
@@ -311,7 +523,8 @@ function resetTiles(){
   for(let j=0; j<31; j++){
     originalTiles[j] = [];
     for(let i=0; i<28; i++){
-      originalTiles[j][i] = new Tile(16*i+8, 16*j+8);
+      let tileCoords = tileToPixel(createVector(i, j));//Vector
+      originalTiles[j][i] = new Tile(tileCoords.x, tileCoords.y);//Tile(16*i+8, 16*j+8);
       switch(tilesRepresentation[j][i]){
       case 1://case 1 is a wall
         originalTiles[j][i].wall = true;
@@ -349,7 +562,8 @@ function mousePressed(){
     if(choice1){//start the game
       newGame();
     }if(choice2){//watch the ai
-      newGame();
+      auto = true;
+      gameStart = true;
       //add code to active the ai here
     }if(choice3){//choose to see the ghost Path's 
       showAllPath = !showAllPath;
@@ -358,6 +572,7 @@ function mousePressed(){
     }
   }if(toTitle){
     gameStart = false;
+    auto = false;
     toTitle = false;
   }
 }
@@ -367,60 +582,134 @@ function keyPressed(){//controls for pacman
   case 87://w
     pacman.goTo = createVector(0, -1);
     pacman.turn = true;
+    humanPlayer.pacman.turnTo = createVector(0, -1);
+    humanPlayer.pacman.turn = true;
     break;
   case 83://s
     pacman.goTo = createVector(0, 1);
     pacman.turn = true;
+    humanPlayer.pacman.turnTo = createVector(0, 1);
+    humanPlayer.pacman.turn = true;
     break;
   case 65://a
     pacman.goTo = createVector(-1, 0);
     pacman.turn= true;
+    humanPlayer.pacman.turnTo = createVector(-1, 0);
+    humanPlayer.pacman.turn = true;
     break;
   case 68://d
     pacman.goTo = createVector(1, 0);
     pacman.turn = true;
+    humanPlayer.pacman.turnTo = createVector(1, 0);
+    humanPlayer.pacman.turn = true;
     break;
   case 38://Up
     pacman.goTo = createVector(0, -1);
     pacman.turn = true;
+    humanPlayer.pacman.turnTo = createVector(0, -1);
+    humanPlayer.pacman.turn = true;
     break;
   case 40://Down
     pacman.goTo = createVector(0, 1);
     pacman.turn = true;
+    humanPlayer.pacman.turnTo = createVector(0, 1);
+    humanPlayer.pacman.turn = true;
     break;
   case 37://Left
     pacman.goTo = createVector(-1, 0);
     pacman.turn= true;
+    humanPlayer.pacman.turnTo = createVector(-1, 0);
+    humanPlayer.pacman.turn = true;
     break;
   case 39://Right
     pacman.goTo = createVector(1, 0);
     pacman.turn = true;
+    humanPlayer.pacman.turnTo = createVector(1, 0);
+    humanPlayer.pacman.turn = true;
     break;
+  case 32://' ', toggle showBest
+    showBest = !showBest;
+    break;
+  case 61://'+', speed up frame rate
+    speed += 10;
+    frameRate(speed);
+    break;
+  case 173://'-', slow down frame rate
+    if(speed>10){
+      speed-=10;
+      frameRate(speed);
+    }
+  case 66://'b', run the best
+    runBest = !runBest;
+    break;
+  case 83://'s', show species
+    runThroughSpecies = !runThroughSpecies;
+    upToSpecies = 0;
+    speciesChamp = population.species[upToSpecies].champ.cloneForReplay();
+    break;
+  case 71://'g', show generations
+    showBestEachGen = !showBestEachGen;
+    upToGen = 0;
+    enterStage(population.genPlayers[upToGen].stage);
+    genPlayerTemp = population.genPlayers[upToGen].clone();
+    break;
+  case 78://'n', show absolutely nothing in order to speed up computation
+    showNothing = !showNothing;
+    break;
+  case 80://'p', play the game while in AI mode
+    humanPlaying = !humanPlaying;
+    humanPlayer = new Player();
+    break;
+  case 76://'l', shows the next species in the current Generation
+    if(runThroughSpecies){//if showing the species in the current generation then move on to the next species
+      upToSpecies++;
+      if (upToSpecies>=population.species.length){
+          runThroughSpecies = false;
+      }else{
+        speciesChamp = population.species[upToSpecies].champ.cloneForReplay();
+      }
+    }else{
+      if(showBestEachGen){//if showing the best player for each generation then move to the next generation
+        upToGen++;
+        if(upToGen>=population.genPlayers.length) {//if at the current generation then stop showing generations
+          showBestEachGen = false;
+          enterStage(upToStage);
+        }else{
+          enterStage(population.genPlayers[upToGen].stage);
+          genPlayerTemp = population.genPlayers[upToGen].cloneForReplay();
+        }
+      }
+    }break;
   }
 }
 
 function isCriticalPosition(pos){//checks if the parameter position is in the center of a tile
-  let tileCoord = createVector(pos.x-32, pos.y-32);
-  tileCoord.x /= 1.0;
-  tileCoord.y /= 1.0;
-  return ((tileCoord.x-8)%16 == 0 && (tileCoord.y-8)% 16 == 0);
+  let tileCoord = createVector(pos.x, pos.y);//-32
+  //tileCoord.x /= 1.0;
+  //tileCoord.y /= 1.0;
+  return ((tileCoord.x-8)%16==0 && (tileCoord.y-8)%16==0);
 }
 
 function tileToPixel(tileCoord){//takes in Vector, converts tile coordinates to pixel coords
-  let pix = createVector(tileCoord.x * 16 +8, tileCoord.y * 16 +8);
-  pix.mult(1);//scaleUp, x2
-  pix.x += 32;//500
-  pix.y += 32;//windowHeight-496*2
+  let pix = createVector(tileCoord.x*16+8, tileCoord.y*16+8);
+  //pix.mult(1);//scaleUp, x2
+  //pix.x += 0;//500, 32
+  //pix.y += 0;//windowHeight-496*2, 32
   return pix;
 }
 
 function pixelToTile(pix) {//converts pixel coordinates to tile coordinates
-  let tileCoord = createVector(pix.x-32, pix.y-32);//-500, -windowHeight-496*2
-  tileCoord.x /= 1.0;//2
-  tileCoord.y /= 1.0;//2
+  let tileCoord = createVector(pix.x, pix.y);//-500, -windowHeight-496*2, -32
+  //tileCoord.x /= 1.0;//2
+  //tileCoord.y /= 1.0;//2
   let finalTileCoord = createVector((tileCoord.x-8)/16, (tileCoord.y - 8)/16);
   return finalTileCoord;
 }
+
+//Fixes the position of Pacman or ghosts if they go past through the tunnel
+function specialCase(p){//takes in p5.vector
+    p.x = (p.x == 24) ? 424 : (p.x == 424 ? 24 : p.x);//true if the pacman is leaving the tunnel
+  }
 
 //returns the closest tile that isn't a wall to the input vector
 //input is in tile coordinates, [j][i] order

@@ -48,7 +48,7 @@ class Player{
   }
   
   look(){//checks the danger of going in a direction
-    if(this.isCriticalPosition(this.pacman.pos)){
+    if(isCriticalPosition(this.pacman.pos)){
       this.vision = [];//[13] floats
       this.vision.length = 13;
       this.distanceToGhostInDirection();
@@ -59,8 +59,9 @@ class Player{
   
   distanceToGhostInDirection(){//sets the inputs for vision in each direction for the ghosts
     this.pacman.blinky.setNodes();//using blinky's nodes
-    let allNodes = this.pacman.blinky.ghostNodes.clone();//[] of PathNode
+    let allNodes = this.pacman.blinky.ghostNodes = [];//[] of PathNode
     let pacmanNode = allNodes[allNodes.length-1];//PathNode
+    //alert(this.pacman.blinky.ghostNodes);
     if(!this.pacman.blinky.active){
       allNodes.shift();//removes the first, opposite of pop()
     }else{

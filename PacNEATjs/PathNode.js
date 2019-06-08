@@ -49,6 +49,12 @@ class PathNode{//Nodes are the locations on the board where pacman or the ghosts
     }
   }
   
+  clone(){
+    let clone = new PathNode(this.x, this.y);
+    clone.isGhost = this.isGhost;
+    return clone;
+  }
+  
   toString(){
     return " ("+this.x+","+this.y+") ";
   }

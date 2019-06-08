@@ -2,7 +2,7 @@
 class Pacman{
   constructor(){
     //this.pos = createVector(13*16+8, 23*16+8); //Starting position of pacman
-    this.pos = createVector(13, 28);
+    this.pos = tileToPixel(createVector(13, 28));
     this.vel = createVector(-1, 0);//velocity or change where Pacman is headed
     this.goTo = createVector(-1, 0);//When pacman reaches a node, the velocity changes to where he is going with goTo
     this.turn = false;
@@ -81,20 +81,15 @@ class Pacman{
   //resets the game board after pacman dies or advances to the next level
   resetBoard(){
     //location pacman is reset to
-    this.pos = createVector(13*16+8, 23*16+8); 
+    this.pos = tileToPixel(createVector(13, 23))//createVector(13*16+8, 23*16+8); 
     //resets all of the ghosts
-    this.blinky = new Blinky();
-    this.clyde = new Clyde();
-    this.pinky = new Pinky();
-    this.inky = new Inky();
+    this.blinky = new Blinky(this);
+    this.clyde = new Clyde(this);
+    this.pinky = new Pinky(this);
+    this.inky = new Inky(this);
     //resets pacmans velocity
     this.vel = createVector(-1, 0);
     this.goTo = createVector(-1,0);
-  }
-  
-  //Fixes the position of Pacman or ghosts if they go past through the tunnel
-  specialCase(p){//takes in p5.vector
-    p.x = (p.x == 24) ? 424 : (p.x == 424 ? 24 : p.x);//true if the pacman is leaving the tunnel
   }
 
   //returns true if pacman can move into the next location 
@@ -131,14 +126,13 @@ class Pacman{
             this.inky.flashCount = 0;
           }
         }
-      }
-      //the position in the tiles array that pacman is turning towards
+      }//the position in the tiles array that pacman is turning towards
       let positionToCheck = new createVector(arrPosition.x + this.goTo.x, arrPosition.y + this.goTo.y);
       //console.log("Position to Check X: ", positionToCheck.x, " Y: ", positionToCheck.y);
       if(this.tiles[floor(positionToCheck.y)][floor(positionToCheck.x)].tunnel){//checks if the next position will be in the tunnel
-        this.specialCase(this.pos);
+        specialCase(this.pos);
       }if(this.tiles[floor(positionToCheck.y)][floor(positionToCheck.x)].wall){//checks if the space is not a wall
-        if(tiles[floor(arrPosition.y + vel.y)][floor(arrPosition.x + vel.x)].wall){
+        if(this.tiles[floor(arrPosition.y + this.vel.y)][floor(arrPosition.x + this.vel.x)].wall){
           this.vel = createVector(this.goTo.x, this.goTo.y);//Not sure about this line...
           return false;
         }else{//moving ahead is free
@@ -154,6 +148,8 @@ class Pacman{
       if(isCriticalPosition(ahead)){
         //let arrPosition = createVector((this.pos.x+10*this.vel.y-8)/16, (this.pos.y+10*this.vel.y)/16);
         let arrPostion = pixelToTile(ahead);//convert to an array position
+        alert(pixelToTile(ahead));
+        alert(arrPosition);
         if(!this.tiles[floor(arrPosition.y)][floor(arrPosition.x)].eaten){
           this.tiles[floor(arrPosition.y)][floor(arrPosition.x)].eaten = true;//eat the dot
           this.score+=1;//10
