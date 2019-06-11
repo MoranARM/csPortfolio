@@ -49,22 +49,29 @@ function setup() {
   hypEnd = -50;
   numStars = 400;
   //numStars = 100;
-  newStars(numStars, 25, 25, 25, 25);
+  newStars(numStars, 50, 50, 50, 50);
   //console.log(this.stars);//checks if star objects were created
 }
 
 function newStars(t, t1, t2, t3, t4){//takes in the total when only one ship is displayed, then the total for each quadrant
   createStars(0, t, -width/2, width/2, -height/2, height/2);//first t (total) hold main view
-  createStars(t, t+t1, width/4, width/2, height*0.9/4, height*1.1/4);//topLeft
-  //createStars(t+t1, t+t1+t2, 0, width/2, 0, height/2);//topRight
-  //createStars(t+t1+t2, t+t1+t2+t3, 0, width/2, height/2, height);//bottomLeft
-  //createStars(t+t1+t2+t3, t+t1+t2+t3+t4, width/2, width, height/2, height);//bottomRight
+  createMini(t, t+t1, width/4, width/2, height/4, height/2);//topLeft
+  createMini(t+t1, t+t1+t2, width*3/4, width/2, height/4, height/2);//topRight
+  createMini(t+t1+t2, t+t1+t2+t3, width/4, width/2, height*3/4, height/2);//bottomLeft
+  createMini(t+t1+t2+t3, t+t1+t2+t3+t4, width*3/4, width/2, height*3/4, height/2);//bottomRight
 }
 
 //Used for full screen Ships
 function createStars(fi, li, x1, x2, y1, y2, full){//takes in first index, last index, x start, x end, y start, y end
   for(let i=fi; i<li; i++){
     stars[i] = new Star(x1, x2, y1, y2);
+  }
+}
+
+//Used for smaller multiple displays
+function createMini(fi, li, x1, x2, y1, y2){//takes in first index, last index, x midpoint, x width, y midpoint, y height
+  for(let i=fi; i<li; i++){
+    stars[i] = new ShootingStar(x1, x2, y1, y2);
   }
 }
 
@@ -77,8 +84,8 @@ function draw(){
     translate(width*3/4, height*3/4);
 	displayStars();
   displayShips();//displays the ships last so that the stars appear through their cockpits
-  if(frameCount%10==0)
-    console.log("MouseX:"+mouseX+", MouseY:"+mouseY);
+  //if(frameCount%15==0&&frameCount>1200)
+    //console.log("MouseX:"+mouseX+", MouseY:"+mouseY);
 }
 
 function checkHyperSpd(){//switches between hyperspeed and regular flying
@@ -107,11 +114,11 @@ function getStars(fi, li){
 }
 
 function displayStars(){
-  //if(count<4){//if only one ship is shown
+  if(count<4){//if only one ship is shown
     getStars(0, numStars);
-  //}else{//if displaying all four ships at once
-    //getStars(numStars, stars.length);
-  //}
+  }else{//if displaying all four ships at once
+    getStars(numStars, stars.length);
+  }
 }
 
 function displayShips(){//cyles through display each ship and then a grid of all of the ships
